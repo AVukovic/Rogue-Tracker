@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 """
 
@@ -43,13 +44,11 @@ def rename(*args):
     except ValueError:
         pass
     
-def flatten_buttons():
-    for button in buttons:
-        button.config(relief = "raised")
-    
     
 def make_credits(*args):
-    pass
+    messagebox.showinfo(message=
+    'Rogue Tracker (v 0.01)\nDeveloped by Alexander Vukovic', title = "Credits")
+    
 
 def make_stats(*args):
     pass
@@ -64,7 +63,7 @@ def make_skills(*args):
 ____________________________________________________________________________"""
 #object defintions 
 stats = [] 
-skills = []
+skills = ["HP: 20/20"]
 inventory = []
 
 #root frame
@@ -103,17 +102,8 @@ empty_box = ttk.Frame(empty_frame, relief = "sunken")
 
 #"Stuff" frame
 stuff_frame = ttk.Frame(main_frame, padding = "3 3 12 12")
-
-#Credits Definition
-credits_name = ttk.Label(stuff_frame, text = 
-                         "Rogue Tracker (Version 0.01)")
-credits_development = ttk.Label(stuff_frame, text = 
-                                "Developed by Alexander Vukovic")
-
-#Stats Definiton
 list_box = ttk.Frame(stuff_frame, padding = "2 2 8 8")
 stat_scroll = Scrollbar(list_box)
-current_stat = ttk.Label(list_box, text = "CURRENT STATS:")
 stat_list = Listbox(list_box,height = 3,yscrollcommand=stat_scroll.set)
 stat_scroll.config(command=stat_list.yview)
 stat_list.insert(1, "HP: 20/20")
@@ -173,6 +163,8 @@ stat_title.grid(column = 0, row = 0)
 show_stat_name.grid(column = 1, row = 0)
 current_stat.grid(column = 0, row = 1)
 show_current_stat.grid(column = 1, row = 1)
+max_stat.grid(column = 0, row = 2)
+show_max_stat.grid(column = 1, row = 2)
 
 
 #credit grid
@@ -182,8 +174,6 @@ show_current_stat.grid(column = 1, row = 1)
 
 """Reference lists:
 ____________________________________________________________________________"""
-
-buttons = [credits_button,stats_button,skills_button,inventory_button]
 
 root.mainloop()
 
