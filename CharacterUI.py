@@ -26,7 +26,7 @@ finally, a Button (NAMEBUTTON) to solidify the input as a new name.
 name. Will change if the user enters a new name in the *ENTRYBOX*.
 
 3: Menu_Frame: A frame containing buttons pertaining to a player's Skills
-(SKILLS), current attributes and statistics (STATS), inventory (ITEMS), and 
+(SKILLS), current attributes and boxistics (STATS), inventory (ITEMS), and 
 a simple set of credits listening the creator and the versions update history.
 
 4: Content_Frame: A frame that will contains the contents of the various buttons
@@ -51,21 +51,35 @@ def make_credits(*args):
     
 
 def make_stats(*args):
-    pass
+    populate(stats)
+    
 
 def make_inventory(*args):
-    pass
+    populate(items)
 
 def make_skills(*args):
+    populate(skills)
+
+def populate(lst):
+    box_list.delete(0,END)
+    for x in lst:
+        box_list.insert(END,x)
+
+def add(*args):
+    pass
+
+def edit(*args):
+    pass
+
+def delete(*args):
     pass
 
 """Definitions of all widgets starts here:
 ____________________________________________________________________________"""
 #object defintions 
-stats = [] 
-skills = ["HP: 20/20"]
-inventory = []
-
+stats = ["HP: 20/20"]
+skills = ["Haste: Castable"]
+items = ["Gold: x100"]
 #root frame
 root = Tk()
 root.title("Rogue Tracker (v0.01)")
@@ -103,29 +117,20 @@ empty_box = ttk.Frame(empty_frame, relief = "sunken")
 #"Stuff" frame
 stuff_frame = ttk.Frame(main_frame, padding = "3 3 12 12")
 list_box = ttk.Frame(stuff_frame, padding = "2 2 8 8")
-stat_scroll = Scrollbar(list_box)
-stat_list = Listbox(list_box,height = 3,yscrollcommand=stat_scroll.set)
-stat_scroll.config(command=stat_list.yview)
-stat_list.insert(1, "HP: 20/20")
-stat_scroll = Scrollbar(list_box)
-edit_box = ttk.Frame(list_box, padding = "1 1 4 4")
-stat_title = ttk.Label(edit_box, text = "Stat Name:")
-stat_name = StringVar()
-stat_name.set("Stat")
-show_stat_name =ttk.Label(edit_box, textvariable = stat_name)
-current_stat = ttk.Label(edit_box,text = "Current Stat Value:") 
-current_stat_value = StringVar()
-current_stat_value.set("Current Value")
-show_current_stat = ttk.Label(edit_box, textvariable = current_stat_value)
-max_stat = ttk.Label(edit_box, text = "Max Stat Value:")
-max_stat_value = StringVar()
-max_stat_value.set("Max Value")
-show_max_stat = ttk.Label(edit_box, textvariable = max_stat_value)
+box_scroll = Scrollbar(list_box)
+box_list = Listbox(list_box,height = 3,yscrollcommand=box_scroll.set)
+populate(stats)
+box_scroll.config(command=box_list.yview)
+box_scroll = Scrollbar(list_box)
+edit_box = ttk.Frame(list_box, padding = "6 6 4 4")
+add_value = ttk.Button(edit_box, text = "Add Value", command = add)
+edit_value = ttk.Button(edit_box, text = "Edit Value", command = edit)
+delete_value = ttk.Button(edit_box, text = "Delete Value", command = delete)
 
 
 
 
-"""Grid-ing Start here
+"""Griding Start here
 ____________________________________________________________________________"""
 
 #Name_Frame grid
@@ -153,23 +158,14 @@ empty_box.grid(column = 1, row = 2)
 #stuff grid
 stuff_frame.grid(column = 1, row = 4)
 
-#stats grid
+#boxs grid
 list_box.grid(column = 0, row = 1)
-stat_scroll.grid(row=1, column = 1)
-stat_list.grid(column = 0, row = 1)
-current_stat.grid(column = 0, row = 0)
-edit_box.grid(column = 2, row = 1)
-stat_title.grid(column = 0, row = 0)
-show_stat_name.grid(column = 1, row = 0)
-current_stat.grid(column = 0, row = 1)
-show_current_stat.grid(column = 1, row = 1)
-max_stat.grid(column = 0, row = 2)
-show_max_stat.grid(column = 1, row = 2)
-
-
-#credit grid
-#credits_name.grid(column = 0, row = 0)
-#credits_development.grid(column = 0, row = 1)
+box_scroll.grid(column = 1, row = 1)
+box_list.grid(column = 0, row = 1)
+edit_box.grid(column = 1, row = 1)
+add_value.grid(column = 0, row = 0)
+edit_value.grid(column = 0, row = 1)
+delete_value.grid(column = 0, row = 2)
 
 
 """Reference lists:
