@@ -49,24 +49,71 @@ def make_credits(*args):
     messagebox.showinfo(message=
     'Rogue Tracker (v 0.01)\nDeveloped by Alexander Vukovic', title = "Credits")
     
+"""def get_name(thing):
+    index = thing.index(":")
+    return thing[0:index]
+
+#def make_new_stat(name,num):
+    return (name + ": " + num + "/" + num)
+
+#def commit_stat(stat_num):
+    return (str(stat_num).isdigit())
+
+#def stat_button_enter(name,num):
+    if not(name == "") and not(num == "") and (commit_stat(num)):
+        stats.append(make_new_stat(name,num))
+        box_list.populate(stats)
+        top.destory()
+    else:
+        pass
+    
+
+#def add_stat(*args):
+    top = Toplevel()
+    top.title("Add Entry")
+    frame = ttk.Frame(top, padding = "2 2 3 3")
+    name_label = ttk.Label(top, text = "Enter name of stat:")
+    name = StringVar()
+    name_entry = ttk.Entry(top, width = 10, textvariable = name)
+    max_stat_label = ttk.Label(top,text = "Enter max # of stat(# only!):")
+    max_stat = StringVar()
+    max_stat_entry = ttk.Entry(top, width = 5, textvariable = max_stat)
+    enter_stat_button = ttk.Button(top, text = "Save Stat", 
+                                   command = stat_button_enter(name, max_stat))
+    exit_button = ttk.Button(top,text = "Cancel", command = top.destroy())
+    name_label.pack() """
+    
+    
 
 def make_stats(*args):
     populate(stats)
+    current_list = "stats"
     
 
 def make_inventory(*args):
     populate(items)
-
+    current_list = "items"
+    
 def make_skills(*args):
     populate(skills)
+    current_list = "skills"
 
 def populate(lst):
     box_list.delete(0,END)
     for x in lst:
         box_list.insert(END,x)
 
-def add(*args):
-    pass
+def add():
+    if current_list == "stats":
+        stats.append("Stat: 0/0")
+        make_stats()
+    elif current_list == "items":
+        items.append("Item: x1")
+        make_inventory()
+    elif current_list == "skills":
+        skills.append("Skill: Castable")
+        make_skills()
+        
 
 def edit(*args):
     pass
@@ -80,6 +127,7 @@ ____________________________________________________________________________"""
 stats = ["HP: 20/20"]
 skills = ["Haste: Castable"]
 items = ["Gold: x100"]
+current_list = "stats"
 #root frame
 root = Tk()
 root.title("Rogue Tracker (v0.01)")
@@ -126,6 +174,7 @@ edit_box = ttk.Frame(list_box, padding = "6 6 4 4")
 add_value = ttk.Button(edit_box, text = "Add Value", command = add)
 edit_value = ttk.Button(edit_box, text = "Edit Value", command = edit)
 delete_value = ttk.Button(edit_box, text = "Delete Value", command = delete)
+current_item = box_list.curselection()
 
 
 
