@@ -96,19 +96,61 @@ def add():
     elif is_skills:
         skills.append("Skill: Castable")
         make_skills()
+        
+def make_new_stat():
+    pass
 
 def stat_edit():
     top = Toplevel()
-    top.title("Edit Value")
+    top.resizable(0,0)
+    top.title("Edit Stat")
+    global stats
+    new_name = StringVar()
+    string = str(box_list.get(box_list.curselection()))
+    name, rest = string.split(":")
+    cur_value, tot_value = rest.split("/")
     
-    msg = Message(top, text="Edit your stat here!")
-    msg.pack()
     
-    button = Button(top, text="Dismiss", command=top.destroy)
-    button.pack()    
+    n_prompt = ttk.Label(top, text="Enter your new stat name: ", 
+                    padding = "8 8 8 8")
+    n_prompt.grid(column = 0, row = 0)
+    
+    name_entry = ttk.Entry(top, width = 15)
+    name_entry.insert(0,name)
+    name_entry.grid(column = 0, row = 1)
+    
+    c_prompt = ttk.Label(top, text="Enter your new current value: ",
+                         padding = "8 8 8 8")
+    c_prompt.grid(column = 0, row = 2)
+    
+    current_entry = ttk.Entry(top, width = 10)
+    current_entry.insert(0,cur_value)
+    current_entry.grid(column = 0, row = 3)
+    
+    t_prompt = ttk.Label(top, text="Enter your new maximum value here: ",
+                         padding = "8 8 8 8")
+    t_prompt.grid(column = 0, row = 4)
+    
+    total_entry = ttk.Entry(top, width = 10)
+    total_entry.insert(0, tot_value)
+    total_entry.grid(column = 0, row = 5)
+    
+    button_frame = ttk.Frame(top, padding = "8 8 8 8")
+    button_frame.grid(column = 0, row = 7)
+    
+    okay = Button(button_frame, text = "Save", command = make_new_stat())
+    okay.grid(column = 0, row = 0)
+    
+    placeholder = ttk.Label(button_frame, text = "")
+    placeholder.grid(column = 1, row = 0, padx = 3)
+    
+    cancel = Button(button_frame, text="Cancel", command=top.destroy)
+    cancel.grid(column = 2, row = 0)
+    
 
 def edit(*args):
-    stat_edit()
+    if is_stats:
+        stat_edit()
 
 def delete():
     idx = box_list.get(box_list.curselection())
@@ -122,6 +164,10 @@ def delete():
         skills.remove(idx)
         make_skills()
         
+def get_name(info):
+    index = info.index(':')
+    return info[:(int(index))]
+        
 
 """Definitions of all widgets starts here:
 ____________________________________________________________________________"""
@@ -132,6 +178,7 @@ items = ["Gold: x100"]
 is_stats = True
 is_items = False
 is_skills = False
+
 #root frame
 root = Tk()
 root.title("Rogue Tracker (v0.01)")
@@ -177,7 +224,6 @@ edit_box = ttk.Frame(list_box, padding = "6 6 4 4")
 add_value = ttk.Button(edit_box, text = "Add Value", command = add)
 edit_value = ttk.Button(edit_box, text = "Edit Value", command = edit)
 delete_value = ttk.Button(edit_box, text = "Delete Value", command = delete)
-current_item = box_list.curselection()
 
 
 
@@ -207,7 +253,7 @@ inventory_button.grid(column = 0, row = 3)
 empty_frame.grid(column = 1, row = 1)
 empty_box.grid(column = 1, row = 2)
 
-#stuff grid
+#stuff_frame
 stuff_frame.grid(column = 1, row = 4)
 
 #boxs grid
