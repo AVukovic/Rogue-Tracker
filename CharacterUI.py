@@ -97,55 +97,49 @@ def add():
         skills.append("Skill: Castable")
         make_skills()
         
-def make_new_stat():
-    pass
 
 def stat_edit():
+    #values
+    global stats
     top = Toplevel()
     top.resizable(0,0)
     top.title("Edit Stat")
-    global stats
     new_name = StringVar()
     string = str(box_list.get(box_list.curselection()))
-    name, rest = string.split(":")
-    cur_value, tot_value = rest.split("/")
     
+    #widgets
+    prompt = ttk.Label(top,text="Enter your new stat here: ", 
+    padding = "8 8 8 8")
+    prompt.grid(column = 0, row = 0)
     
-    n_prompt = ttk.Label(top, text="Enter your new stat name: ", 
-                    padding = "8 8 8 8")
-    n_prompt.grid(column = 0, row = 0)
+    entry = ttk.Entry(top, width = 20, textvariable = new_name)
+    entry.insert(0,string)
+    entry.grid(column = 0, row = 1)
     
-    name_entry = ttk.Entry(top, width = 15)
-    name_entry.insert(0,name)
-    name_entry.grid(column = 0, row = 1)
-    
-    c_prompt = ttk.Label(top, text="Enter your new current value: ",
-                         padding = "8 8 8 8")
-    c_prompt.grid(column = 0, row = 2)
-    
-    current_entry = ttk.Entry(top, width = 10)
-    current_entry.insert(0,cur_value)
-    current_entry.grid(column = 0, row = 3)
-    
-    t_prompt = ttk.Label(top, text="Enter your new maximum value here: ",
-                         padding = "8 8 8 8")
-    t_prompt.grid(column = 0, row = 4)
-    
-    total_entry = ttk.Entry(top, width = 10)
-    total_entry.insert(0, tot_value)
-    total_entry.grid(column = 0, row = 5)
+    """Due to the fact a 'button' widget can't take a command with parameters,
+    this is a wrapper function"""
+    def stat_wrap():
+        global stats
+        stats.insert(stats.index(string), new_name.get())
+        stats.remove(string)
+        make_stats()
+        messagebox.showinfo(message=
+        'Your changes have been saved!', title = "Edit Stat")
+        top.destroy()
     
     button_frame = ttk.Frame(top, padding = "8 8 8 8")
-    button_frame.grid(column = 0, row = 7)
+    button_frame.grid(column = 0, row = 2)
     
-    okay = Button(button_frame, text = "Save", command = make_new_stat())
-    okay.grid(column = 0, row = 0)
-    
-    placeholder = ttk.Label(button_frame, text = "")
-    placeholder.grid(column = 1, row = 0, padx = 3)
+    save = Button(button_frame, text = "Save", command = stat_wrap)
+    save.grid(column = 0, row = 0, padx = 5, pady = 7)
     
     cancel = Button(button_frame, text="Cancel", command=top.destroy)
-    cancel.grid(column = 2, row = 0)
+    cancel.grid(column = 1, row = 0, padx = 5, pady = 7)
+    
+
+def save_stat(idx,x):
+    global stats
+    stats[idx] = x
     
 
 def edit(*args):
@@ -191,7 +185,7 @@ name_frame = ttk.Frame(main_frame, padding = "1 1 4 4")
 player_name = StringVar()#string being displayed by Name_Label
 player_name.set("John Doe") #placeholder string
 name_getter = StringVar() #string fetched from NAMEBUTTON
-entry_name_label = ttk.Label(name_frame, text = "Enter name here:")
+entry_name_label = ttk.Label(name_frame, text = "Enter new name here: ")
 name_button = ttk.Button(name_frame, text = "Edit Name", command = rename)
 entry_box = ttk.Entry(name_frame, width = 14, textvariable = name_getter)
 
