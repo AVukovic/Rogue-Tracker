@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-
 """
 
 SETUP FOR THE WINDOW:
@@ -99,6 +98,8 @@ def add():
         
 
 def stat_edit():
+    if Exception:
+        pass
     #values
     global stats
     top = Toplevel()
@@ -117,7 +118,7 @@ def stat_edit():
     entry.grid(column = 0, row = 1)
     
     """Due to the fact a 'button' widget can't take a command with parameters,
-    this is a wrapper function"""
+    this is a wrapper function."""
     def stat_wrap():
         global stats
         stats.insert(stats.index(string), new_name.get())
@@ -136,6 +137,52 @@ def stat_edit():
     cancel = Button(button_frame, text="Cancel", command=top.destroy)
     cancel.grid(column = 1, row = 0, padx = 5, pady = 7)
     
+    
+def skill_edit():
+    #values
+    global skills
+    top = Toplevel()
+    top.resizable(0,0)
+    top.title("Edit Skill")
+    org_name = StringVar()
+    new_name = StringVar()
+    cast_status = StringVar()
+    string = str(box_list.get(box_list.curselection()))
+    cast_status.set((string.split(":"))[1])
+    org_name.set((string.split(":"))[0])
+    
+    def skill_wrap():
+        global skills
+        skills.insert(skills.index(string), 
+                      new_name.get() + ":" + cast_status.get())
+        skills.remove(string)
+        make_skills()
+        messagebox.showinfo(message=
+        'Your changes have been saved!', title = "Edit Skill")
+        top.destroy()        
+    
+    #widgets
+    name_prompt = ttk.Label(top,
+    text = "Enter your new name here: \n(Please no ':' !)")
+    name_prompt.grid(column = 0, row = 0, padx = 15)
+    
+    name_entry = ttk.Entry(top, width = 14, textvariable = new_name)
+    name_entry.insert(0, org_name.get())
+    name_entry.grid(column = 0, row = 1, pady = 10)
+    
+    cast_check = OptionMenu(top, cast_status, "Castable", "Uncastable")
+    cast_check.grid(column = 0, row = 2)
+    
+    button_frame = ttk.Frame(top, padding = "8 8 12 12")
+    button_frame.grid(column = 0, row = 3)
+    
+    save = Button(button_frame, text = "Save", command = skill_wrap)
+    save.grid(column = 0, row = 0, padx = 5, pady = 7)
+        
+    cancel = Button(button_frame, text="Cancel", command=top.destroy)
+    cancel.grid(column = 1, row = 0, padx = 5, pady = 7)    
+    
+    
 
 def save_stat(idx,x):
     global stats
@@ -145,6 +192,8 @@ def save_stat(idx,x):
 def edit(*args):
     if is_stats:
         stat_edit()
+    elif is_skills:
+        skill_edit()
 
 def delete():
     idx = box_list.get(box_list.curselection())
@@ -260,7 +309,7 @@ edit_value.grid(column = 0, row = 1)
 delete_value.grid(column = 0, row = 2)
 
 
-"""Reference lists:
+"""Mainloop:
 ____________________________________________________________________________"""
 
 root.mainloop()
