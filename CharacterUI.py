@@ -46,7 +46,7 @@ def rename(*args):
     
 def make_credits(*args):
     messagebox.showinfo(message=
-    'Rogue Tracker (v 0.01)\nDeveloped by Alexander Vukovic', title = "Credits")
+    'Rogue Tracker (v 1.00)\nDeveloped by Alexander Vukovic', title = "Credits")
     
 def get_name(thing):
     index = thing.index(":")
@@ -90,7 +90,7 @@ def add():
         stats.append("Stat: 0/0")
         make_stats()
     elif is_items:
-        items.append("Item: x1")
+        items.append("Item * 1")
         make_inventory()
     elif is_skills:
         skills.append("Skill: Castable")
@@ -153,8 +153,12 @@ def skill_edit():
     
     def skill_wrap():
         global skills
+        if ":" in new_name.get():
+            messagebox.showinfo(message = "Invalid Characters!", 
+                                title = "Edit Skill")
+            return
         skills.insert(skills.index(string), 
-                      new_name.get() + ":" + cast_status.get())
+                      new_name.get() + ": " + cast_status.get())
         skills.remove(string)
         make_skills()
         messagebox.showinfo(message=
@@ -180,13 +184,104 @@ def skill_edit():
     save.grid(column = 0, row = 0, padx = 5, pady = 7)
         
     cancel = Button(button_frame, text="Cancel", command=top.destroy)
+    cancel.grid(column = 1, row = 0, padx = 5, pady = 7)
+    
+def stat_edit():
+    if Exception:
+        pass
+    #values
+    global stats
+    top = Toplevel()
+    top.resizable(0,0)
+    top.title("Edit Stat")
+    new_name = StringVar()
+    string = str(box_list.get(box_list.curselection()))
+    
+    #widgets
+    prompt = ttk.Label(top,text="Enter your new stat here: ", 
+    padding = "8 8 8 8")
+    prompt.grid(column = 0, row = 0)
+    
+    entry = ttk.Entry(top, width = 20, textvariable = new_name)
+    entry.insert(0,string)
+    entry.grid(column = 0, row = 1)
+    
+    """Due to the fact a 'button' widget can't take a command with parameters,
+    this is a wrapper function."""
+    def stat_wrap():
+        global stats
+        stats.insert(stats.index(string), new_name.get())
+        stats.remove(string)
+        make_stats()
+        messagebox.showinfo(message=
+        'Your changes have been saved!', title = "Edit Stat")
+        top.destroy()
+    
+    button_frame = ttk.Frame(top, padding = "8 8 8 8")
+    button_frame.grid(column = 0, row = 2)
+    
+    save = Button(button_frame, text = "Save", command = stat_wrap)
+    save.grid(column = 0, row = 0, padx = 5, pady = 7)
+    
+    cancel = Button(button_frame, text="Cancel", command=top.destroy)
     cancel.grid(column = 1, row = 0, padx = 5, pady = 7)    
     
+def items_edit():
+    #values
+    global items
+    top = Toplevel()
+    top.resizable(0,0)
+    top.title("Edit Inventory")
+    org_name = StringVar()
+    new_name = StringVar()
+    org_value = StringVar()
+    new_value = StringVar()
+    string = str(box_list.get(box_list.curselection()))
+    new_string = string.replace(" ", "")
+    org_value.set((new_string.split("*"))[1])
+    org_name.set((new_string.split("*"))[0])    
+        
+    #widgets
+    entry_box = ttk.Frame(top, padding = "12 12 12 12")
+    entry_box.grid(column = 0, row = 0)
     
-
-def save_stat(idx,x):
-    global stats
-    stats[idx] = x
+    name_prompt = ttk.Label(entry_box,text="Enter your new\nitem name here: ", 
+    padding = "8 8 8 8")
+    name_prompt.grid(column = 0, row = 0)
+        
+    name_entry = ttk.Entry(entry_box, width = 15, textvariable = new_name)
+    name_entry.insert(0,org_name.get())
+    name_entry.grid(column = 0, row = 1)
+    
+    value_prompt = ttk.Label(entry_box, text = "Enter your new value here:",
+    padding = "8 8 8 8")
+    value_prompt.grid(column = 1, row = 0)
+    
+    value_entry = ttk.Entry(entry_box, width = 10, 
+    textvariable = new_value)
+    value_entry.insert(0,org_value.get())
+    value_entry.grid(column = 1, row = 1)
+        
+    """Due to the fact a 'button' widget can't take a command with parameters,
+        this is a wrapper function."""
+    def item_wrap():
+        global items
+        final = new_name.get() + " * " + new_value.get()
+        items.insert(items.index(string), final)
+        items.remove(string)
+        make_inventory()
+        messagebox.showinfo(message=
+        'Your changes have been saved!', title = "Edit Inventory")
+        top.destroy()
+    
+    button_frame = ttk.Frame(top, padding = "8 8 8 8")
+    button_frame.grid(column = 0, row = 2)
+        
+    save = Button(button_frame, text = "Save", command = item_wrap)
+    save.grid(column = 0, row = 0, padx = 5, pady = 7)
+    
+    cancel = Button(button_frame, text="Cancel", command=top.destroy)
+    cancel.grid(column = 1, row = 0, padx = 5, pady = 7)    
     
 
 def edit(*args):
@@ -194,6 +289,8 @@ def edit(*args):
         stat_edit()
     elif is_skills:
         skill_edit()
+    elif is_items:
+        items_edit()
 
 def delete():
     idx = box_list.get(box_list.curselection())
@@ -217,14 +314,14 @@ ____________________________________________________________________________"""
 #object defintions 
 stats = ["HP: 20/20"]
 skills = ["Haste: Castable"]
-items = ["Gold: x100"]
+items = ["Gold * 100"]
 is_stats = True
 is_items = False
 is_skills = False
 
 #root frame
 root = Tk()
-root.title("Rogue Tracker (v0.01)")
+root.title("Rogue Tracker (v1.00)")
 root.resizable(0,0)
 main_frame = ttk.Frame(root, padding = "12 12 12 24")
 main_frame.grid(column = 0, row = 0)
